@@ -1,10 +1,7 @@
 ﻿using MMDHelpers.CSharp.Extensions;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Core
 {
@@ -18,20 +15,18 @@ namespace Core
             {
                 filename
                     .ToCurrentPath()
-                    .WriteToFile(new List<string> { string.Join("", texts.Select(c => $"{DateTime.Now} - {c} {Environment.NewLine}")) });
-
+                    .WriteToFile(new List<string> { string.Concat(texts.Select(c => $"{DateTime.Now} - {c} {Environment.NewLine}")) });
             }
         }
 
         public static void Write(string filename, IEnumerable<string> texts)
         {
-            if (texts.Count() == 0) return;
+            if (!texts.Any()) return;
             lock (sync)
             {
                 filename
                     .ToCurrentPath()
-                    .WriteToFile(new List<string> { string.Join("", texts.Select(c => $"{DateTime.Now} - {c} {Environment.NewLine}")) });
-
+                    .WriteToFile(new List<string> { string.Concat(texts.Select(c => $"{DateTime.Now} - {c} {Environment.NewLine}")) });
             }
         }
 
@@ -43,9 +38,6 @@ namespace Core
                     .ToCurrentPath()
                     .WriteToFile(new List<string> { $"{DateTime.Now} -  {ex.Message}.{Environment.NewLine}", $"{ex.StackTrace} {Environment.NewLine}" });
             }
-
         }
-
-
     }
 }

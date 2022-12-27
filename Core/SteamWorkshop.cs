@@ -27,7 +27,6 @@ namespace Core
         {
             if (Init())
             {
-
                 var amount = SteamUGC.GetNumSubscribedItems();
                 var ids = new PublishedFileId_t[amount];
                 SteamUGC.GetSubscribedItems(ids, amount);
@@ -51,7 +50,6 @@ namespace Core
             {
                 SteamUGC.UnsubscribeItem(id.FID());
             }
-
         }
     }
 }

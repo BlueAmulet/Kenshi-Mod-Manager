@@ -6,7 +6,6 @@ using Gameloop.Vdf;
 using Gameloop.Vdf.JsonConverter;
 using Gameloop.Vdf.Linq;
 using KenshiModTool.Model;
-using Microsoft.AppCenter.Crashes;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
@@ -272,7 +271,7 @@ namespace KenshiModTool
         public void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
-            if (SearchTimer != null) SearchTimer.Dispose();
+            SearchTimer?.Dispose();
             SearchTimer = new Timer(200);
             currentSearch = txtSearch.Text;
             SearchTimer.Elapsed += SearchTimer_Elapsed;
@@ -387,7 +386,7 @@ namespace KenshiModTool
             }
 
             var curList = ModList.Where(c => c.Active && c.UniqueIdentifier != current.UniqueIdentifier);
-            var max = curList.Count() > 0 ? curList.Max(q => q.Order) : 0;
+            var max = curList.Any() ? curList.Max(q => q.Order) : 0;
 
             if (New > max)
             {
@@ -438,9 +437,9 @@ namespace KenshiModTool
 
                 Paragraph paragraph = new Paragraph();
 
-                if (mod.Dependencies != null && mod.Dependencies.Count > 0)
+                if (mod.Dependencies?.Count > 0)
                     WriteRequisites("Dependencies: ", mod.Dependencies);
-                if (mod.References != null && mod.References.Count > 0)
+                if (mod.References?.Count > 0)
                     WriteRequisites("References: ", mod.References);
 
                 if (mod.Conflicts.Count > 0)
@@ -498,7 +497,7 @@ namespace KenshiModTool
                             Foreground = color
                         });
 
-                        if ((i + 1) < requisite.Count && requisite.Count > 1) paragraph.Inlines.Add($" ,");
+                        if ((i + 1) < requisite.Count && requisite.Count > 1) paragraph.Inlines.Add(" ,");
                     }
                     paragraph.Inlines.Add($"{Environment.NewLine}");
                 }
@@ -542,7 +541,6 @@ namespace KenshiModTool
             if (File.Exists(Path.Combine(LoadService.config.GamePath, "data", "mods.cfg")))
                 File.Copy(Path.Combine(LoadService.config.GamePath, "data", "mods.cfg"), Path.Combine(LoadService.config.GamePath, "data", "mods.cfg.backup"), true);
 
-
             if (Directory.Exists(Path.Combine(LoadService.config.GamePath)))
             {
                 File.WriteAllLines(Path.Combine(LoadService.config.GamePath, "data", "mods.cfg"), ModList.Where(m => m.Active).OrderBy(q => q.Order).Select(m => m.FileName));
@@ -551,7 +549,6 @@ namespace KenshiModTool
             {
                 MessageBox.Show(ConstantMessages.GameFolderNotConfiguredCorrectly, "List not saved!");
             }
-
         }
 
         public void BtnGameFolder_Click(object sender, RoutedEventArgs e)
@@ -703,10 +700,7 @@ namespace KenshiModTool
         public void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             ListBackgroundWorker = null;
-            this.Dispatcher.Invoke(() =>
-            {
-                PBStatus.Value = 0;
-            });
+            this.Dispatcher.Invoke(() => PBStatus.Value = 0);
         }
 
         public void ToggleActive(object sender, RoutedEventArgs e) =>
@@ -770,7 +764,7 @@ namespace KenshiModTool
             bool failure = false;
             foreach (var mod in lsView.SelectedItems)
             {
-                CommonService.OpenFolder(System.IO.Path.GetDirectoryName(((Mod)mod).FilePath), () => { failure = true; });
+                CommonService.OpenFolder(System.IO.Path.GetDirectoryName(((Mod)mod).FilePath), () => failure = true);
             }
 
             if (failure)
@@ -781,11 +775,9 @@ namespace KenshiModTool
 
         public void CheckConflicts(object sender, RoutedEventArgs e)
         {
-
             try
             {
-
-                if (ModList.Where(c => c.Active).Count() == 0)
+                if (!ModList.Any(c => c.Active))
                 {
                     MessageBox.Show("you should have mods to check conflicts");
                     return;
@@ -795,7 +787,6 @@ namespace KenshiModTool
 
                 ExecuteWorker((object sender, DoWorkEventArgs args) =>
                 {
-
                     var changes = new Dictionary<string, List<Dictionary<string, string>>>();
                     var cm = new ConflictManager();
 
@@ -820,7 +811,6 @@ namespace KenshiModTool
                         cm.LoadMods(mod.FilePath, ModMode.ACTIVE, baseGameData);
                         current++;
                         (sender as BackgroundWorker).ReportProgress(current.Percent(length));
-
                     }
 
                     baseGameData.resolveAllReferences();
@@ -841,7 +831,6 @@ namespace KenshiModTool
                         (sender as BackgroundWorker).ReportProgress(current.Percent(length));
                     }
 
-
                     MessageBox.Show("hey, i completed the changes, i'm generating a report, it'll take a while if your mods has alot of changes.");
 
                     cm.LoadChanges();
@@ -851,7 +840,6 @@ namespace KenshiModTool
 
                     //var filename = Constants.modChangesFileName;
                     //var detailsFilename = Constants.DetailChangesFileName;
-
 
                     //Console.WriteLine("writing reports");
                     //var list = new Task[] {
@@ -872,7 +860,6 @@ namespace KenshiModTool
 
                     Parallel.ForEach(ConflictIndex.Keys, (key) =>
                     {
-
                         if (ConflictIndex[key].Mod.Count == 1) return;
                         foreach (var modName in ConflictIndex[key].Mod)
                         {
@@ -887,11 +874,7 @@ namespace KenshiModTool
                     });
 
                     UpdateListView();
-
                 });
-
-
-
             }
             catch (Exception)
             {
@@ -965,13 +948,11 @@ namespace KenshiModTool
         {
             var toolBar = sender as ToolBar;
 
-            var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
-            if (overflowGrid != null)
+            if (toolBar.Template.FindName("OverflowGrid", toolBar) is FrameworkElement overflowGrid)
             {
                 overflowGrid.Visibility = Visibility.Collapsed;
             }
-            var mainPanelBorder = toolBar.Template.FindName("MainPanelBorder", toolBar) as FrameworkElement;
-            if (mainPanelBorder != null)
+            if (toolBar.Template.FindName("MainPanelBorder", toolBar) is FrameworkElement mainPanelBorder)
             {
                 mainPanelBorder.Margin = new Thickness();
             }
@@ -1017,12 +998,7 @@ namespace KenshiModTool
         {
             try
             {
-
                 var stopwatch = Stopwatch.StartNew();
-
-                var filename = Constants.modChangesFileName;
-                var detailsFilename = Constants.DetailChangesFileName;
-
 
                 var changes = new Dictionary<string, List<Dictionary<string, string>>>();
                 var cm = new ConflictManager();
@@ -1062,21 +1038,15 @@ namespace KenshiModTool
 
                     cm.ListOfGameData.Add(gd);
 
-
                     if (!Directory.Exists("indexedMods"))
                         Directory.CreateDirectory("indexedMods");
                     File.WriteAllText($"indexedMods/{mod.DisplayName}", JsonConvert.SerializeObject(new { gd.Signature, mod.DisplayName, gd.header.Version, gd.items }, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
-
                 }
-
-
 
                 stopwatch.Stop();
                 Console.WriteLine(stopwatch.ElapsedMilliseconds / 1000 + " Seconds Elapsed");
-
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("I'm working on this feature... it's complicated :)");
             }

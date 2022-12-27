@@ -13,23 +13,23 @@ namespace Core
 
         public static Metadata LoadMetadata(string filename)
         {
-            Metadata header = (Metadata)null;
+            Metadata header = null;
             FileStream fileStream;
             try
             {
                 fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
-                return (Metadata)null;
+                return null;
             }
-            BinaryReader file = new BinaryReader((Stream)fileStream);
+            BinaryReader file = new BinaryReader(fileStream);
             try
             {
                 if (file.ReadInt32() > 15)
                     header = MountMetadata(file);
             }
-            catch (EndOfStreamException ex)
+            catch (EndOfStreamException)
             {
             }
             file.Close();
@@ -43,8 +43,8 @@ namespace Core
             header.Version = file.ReadInt32();
             header.Author = Read(file);
             header.Description = Read(file);
-            header.Dependencies = new List<string>((IEnumerable<string>)Read(file).Split(',').Where(m => !Constants.SkippableMods.Contains(m.ToLower())));
-            header.Referenced = new List<string>((IEnumerable<string>)Read(file).Split(',').Where(m => !Constants.SkippableMods.Contains(m.ToLower())));
+            header.Dependencies = new List<string>(Read(file).Split(',').Where(m => !Constants.SkippableMods.Contains(m.ToLower())));
+            header.Referenced = new List<string>(Read(file).Split(',').Where(m => !Constants.SkippableMods.Contains(m.ToLower())));
             if (header.Dependencies.Count == 1 && header.Dependencies[0] == "")
                 header.Dependencies.Clear();
             if (header.Referenced.Count == 1 && header.Referenced[0] == "")

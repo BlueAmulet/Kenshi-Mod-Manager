@@ -1,7 +1,4 @@
 ﻿using Core.Kenshi_Data.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Kenshi_Data.Model
 {

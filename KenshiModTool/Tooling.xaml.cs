@@ -4,7 +4,6 @@ using KenshiModTool.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -133,10 +132,9 @@ namespace KenshiModTool
             var logging = Task.Run(() =>
             {
                 var appendLog = new List<string> {
-                $"{DateTime.Now} - Trying to Create SymbLinks:"
+                    $"{DateTime.Now} - Trying to Create SymbLinks:",
+                    $"{DateTime.Now} - Detailed List:"
                 };
-
-                appendLog.Add($"{DateTime.Now} - Detailed List:");
                 appendLog.AddRange(symblist.Select(item => $"{DateTime.Now} From {item.Item2} To {item.Item1}:"));
 
                 Logging.Write(Constants.Logfile, appendLog);
@@ -196,7 +194,7 @@ namespace KenshiModTool
             bool failure = false;
             foreach (var mod in ListBox.SelectedItems)
             {
-                CommonService.OpenFolder(System.IO.Path.GetDirectoryName(((ModFolder)mod).FilePath), () => { failure = true; });
+                CommonService.OpenFolder(System.IO.Path.GetDirectoryName(((ModFolder)mod).FilePath), () => failure = true);
             }
 
             if (failure)
@@ -221,7 +219,7 @@ namespace KenshiModTool
 
         public void CreateSymbSelected_Click(object sender, RoutedEventArgs e)
         {
-            if (ListBox.SelectedItems != null && ListBox.SelectedItems.Count > 0)
+            if (ListBox.SelectedItems?.Count > 0)
             {
                 ExecuteSymbLink(ShouldDelete: false);
 
@@ -242,10 +240,12 @@ namespace KenshiModTool
                 else
                 {
                     if (ShouldAdd)
+                    {
                         symblist.Add(new Tuple<string, string>(
                       System.IO.Path.Combine(LoadService.config.ModFolder, System.IO.Path.GetFileNameWithoutExtension(mod.FilePath)),
                       System.IO.Path.GetDirectoryName(mod.FilePath)
                       ));
+                    }
                 }
             }
 
@@ -254,10 +254,9 @@ namespace KenshiModTool
                 if (!symblist.Any()) return;
 
                 var appendLog = new List<string> {
-                            $"{DateTime.Now} - Trying to Create SymbLinks:"
-                            };
-
-                appendLog.Add($"{DateTime.Now} - Detailed List:");
+                    $"{DateTime.Now} - Trying to Create SymbLinks:",
+                    $"{DateTime.Now} - Detailed List:"
+                };
                 appendLog.AddRange(symblist.Select(item => $"{DateTime.Now} From {item.Item2} To {item.Item1}:"));
 
                 Logging.Write(Constants.Logfile, appendLog);
@@ -266,7 +265,6 @@ namespace KenshiModTool
             {
                 Logging.Write(Constants.Errorfile, "Failed to write log of symblinks.");
                 Logging.Write(Constants.Errorfile, ex);
-
             }
 
             LoadService.CreateSymbLink(symblist, out string message);
@@ -275,7 +273,7 @@ namespace KenshiModTool
 
         public void ToggleSymbSelected_Click(object sender, RoutedEventArgs e)
         {
-            if (ListBox.SelectedItems != null && ListBox.SelectedItems.Count > 0)
+            if (ListBox.SelectedItems?.Count > 0)
             {
                 ExecuteSymbLink();
 
@@ -285,7 +283,7 @@ namespace KenshiModTool
 
         public void RemoveSymbSelected_Click(object sender, RoutedEventArgs e)
         {
-            if (ListBox.SelectedItems != null && ListBox.SelectedItems.Count > 0)
+            if (ListBox.SelectedItems?.Count > 0)
             {
                 ExecuteSymbLink(ShouldAdd: false);
 

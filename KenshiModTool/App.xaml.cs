@@ -5,7 +5,6 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Windows;
 
 namespace KenshiModTool
@@ -21,7 +20,6 @@ namespace KenshiModTool
             this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-
 #if DEBUG
             AppCenter.SetEnabledAsync(false);
 #endif
@@ -29,9 +27,7 @@ namespace KenshiModTool
 
         public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-
             Logging.Write(Constants.Errorfile, $"{JsonConvert.SerializeObject(e.ExceptionObject)}");
-            return;
         }
 
         public void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -40,7 +36,6 @@ namespace KenshiModTool
 
             Logging.Write(Constants.Errorfile, $"{e.Exception.Message}");
             Logging.Write(Constants.Errorfile, $"{e.Exception.StackTrace}");
-            return;
         }
     }
 }

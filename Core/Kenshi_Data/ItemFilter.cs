@@ -19,10 +19,12 @@ namespace Core
             {
                 object lvalue;
                 if (propertyFilter.property == "Type")
-                    lvalue = (object)item.type;
+                {
+                    lvalue = item.type;
+                }
                 else if (propertyFilter.property == "StringID")
                 {
-                    lvalue = (object)item.stringID;
+                    lvalue = item.stringID;
                 }
                 else
                 {
@@ -32,7 +34,7 @@ namespace Core
                         int num = 0;
                         while (!flag)
                         {
-                            string key = propertyFilter.property + (object)num;
+                            string key = propertyFilter.property + num;
                             if (item.ContainsKey(key))
                             {
                                 flag |= this.compareValue(item[key], propertyFilter.value, propertyFilter.mode);
@@ -55,7 +57,7 @@ namespace Core
                             {
                                 Type type = desc.defaultValue.GetType();
                                 if (type.IsEnum)
-                                    lvalue = (object)Enum.GetName(type, lvalue);
+                                    lvalue = Enum.GetName(type, lvalue);
                                 if (lvalue == null)
                                     return false;
                             }
@@ -63,14 +65,14 @@ namespace Core
                     }
                     else if (item.hasReference(propertyFilter.property))
                     {
-                        lvalue = (object)item.GetReferenceCount(propertyFilter.property);
+                        lvalue = item.GetReferenceCount(propertyFilter.property);
                     }
                     else
                     {
                         Desc desc = GameData.getDesc(item.type, propertyFilter.property);
                         if (desc == null || desc.list == ItemType.NULL_ITEM)
                             return false;
-                        lvalue = (object)0;
+                        lvalue = 0;
                     }
                 }
                 if (!this.compareValue(lvalue, propertyFilter.value, propertyFilter.mode))
@@ -92,7 +94,7 @@ namespace Core
                     break;
 
                 case PropertyFilter.Mode.CONTAINS:
-                    if (!(lvalue.ToString().IndexOf(rvalue.ToString(), StringComparison.CurrentCultureIgnoreCase) >= 0))
+                    if (lvalue.ToString().IndexOf(rvalue.ToString(), StringComparison.CurrentCultureIgnoreCase) < 0)
                         return false;
                     break;
 
@@ -133,7 +135,7 @@ namespace Core
             switch (o)
             {
                 case int num:
-                    v = (float)num;
+                    v = num;
                     break;
 
                 case float num:

@@ -36,7 +36,10 @@ namespace Core.Models
                 {
                     return LoadService.config.SteamPageUrl + Id;
                 }
-                else return LoadService.config.NexusPageUrl + DisplayName;
+                else
+                {
+                    return LoadService.config.NexusPageUrl + DisplayName;
+                }
             }
         }
 
@@ -62,7 +65,7 @@ namespace Core.Models
         {
             get
             {
-                if (Categories == null || Categories.Count() == 0)
+                if (Categories?.Any() != true)
                     return "";
                 return string.Join(",", Categories);
             }

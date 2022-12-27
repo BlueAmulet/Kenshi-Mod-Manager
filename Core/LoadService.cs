@@ -5,7 +5,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Permissions;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -66,10 +65,10 @@ namespace Core
             );
 
             var appendLog = new List<string> {
-                $"{DateTime.Now} - Loaded: {list.Count()} Mods",
+                $"{DateTime.Now} - Loaded: {list.Count} Mods",
                 $"{DateTime.Now} - {qtdByType}",
+                $"{DateTime.Now} - Detailed List:"
             };
-            appendLog.Add($"{DateTime.Now} - Detailed List:");
             appendLog.AddRange(list.Select(item => $"{DateTime.Now} - {item.Source} - {item.FilePath}"));
 
             Logging.Write(Constants.Logfile, appendLog);
@@ -101,9 +100,9 @@ namespace Core
                 if (Directory.GetFiles(path).Length > 0)
                 {
                     /// valid path
-                };
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 DeleteFolder(path);
                 return true;
@@ -127,7 +126,7 @@ namespace Core
                 message = "Can't create symblinks, you need to this program as administrator to use this feature.";
                 return;
             }
-            
+
             var sync = new object();
             var infoLogList = new ConcurrentBag<string>();
             var errorLogList = new ConcurrentBag<string>();
@@ -192,22 +191,20 @@ namespace Core
                     }
                     catch (Exception ex)
                     {
-
                         Logging.Write(Constants.Errorfile, "Count't load metadata.", $"The mod {mod.FilePath} may be corrupted.");
                         Logging.Write(Constants.Errorfile, ex);
                     }
 
-                    Func<string, bool> predicate = f => f == Path.GetFileName(mod.FilePath);
+                    bool predicate(string f) => f == Path.GetFileName(mod.FilePath);
                     mod.Active = currentMods.Any(predicate);
 
-                    Metadata metadata = new Metadata { };
+                    Metadata metadata = new Metadata();
                     try
                     {
                         metadata = ModMetadataReader.LoadMetadata(mod.FilePath);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-
                         metadata = new Metadata { Description = $"This mod couldn't be loaded, maybe is corrupted or a empty folder, check the error.log and the mod folder {item}" };
                         Logging.Write(Constants.Errorfile, $"Check the folder: {item}");
                     }
@@ -238,7 +235,7 @@ namespace Core
             else
             {
                 Logging.Write(Constants.Errorfile, $"Count't read folder: {path} .");
-                Logging.Write(Constants.Errorfile, $"When report this error, you may delete config.json and try again.");
+                Logging.Write(Constants.Errorfile, "When report this error, you may delete config.json and try again.");
             }
             return listMods;
         }

@@ -151,8 +151,8 @@ namespace TestProject
 
             Console.WriteLine("writing reports");
             var list = new Task[] {
-                Task.Run(() => { File.WriteAllText(filename, JsonConvert.SerializeObject(cm.conflictIndex)); }),
-                Task.Run(() => { File.WriteAllText(detailsFilename, JsonConvert.SerializeObject(cm.DetailIndex)); }),
+                Task.Run(() => File.WriteAllText(filename, JsonConvert.SerializeObject(cm.conflictIndex))),
+                Task.Run(() => File.WriteAllText(detailsFilename, JsonConvert.SerializeObject(cm.DetailIndex))),
                 Task.Run(() => {
                     foreach (var item in cm.listOfTags)
                     {

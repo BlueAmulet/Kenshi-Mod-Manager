@@ -1,7 +1,6 @@
 ﻿using Core.Kenshi_Data.Enums;
 using Core.Kenshi_Data.Model;
 using Core.Models;
-using Steamworks;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -40,7 +39,7 @@ namespace Core
 
             Parallel.ForEach(mod.items.Values, (obj) =>
             {
-                if (obj.GetState() != State.ORIGINAL && (this.Filter == null || this.Filter.Test(obj)) && ((obj.GetState() != State.OWNED || true) && (obj.GetState() != State.MODIFIED || true)) && ((obj.GetState() != State.REMOVED || false) && (obj.GetState() != State.LOCKED && obj.GetState() != State.LOCKED_REMOVED) && (obj.GetState() != State.REMOVED || obj.OriginalName != null)))
+                if (obj.GetState() != State.ORIGINAL && (this.Filter == null || this.Filter.Test(obj)) && ((obj.GetState() != State.OWNED || true) && (obj.GetState() != State.MODIFIED || true)) && ((obj.GetState() != State.REMOVED) && (obj.GetState() != State.LOCKED && obj.GetState() != State.LOCKED_REMOVED) && (obj.GetState() != State.REMOVED || obj.OriginalName != null)))
                 {
                     nodes.Push(obj);
                 }
@@ -55,7 +54,7 @@ namespace Core
                     {
                         Desc desc = GameData.getDesc(obj1.type, referenceList);
                         if (!(desc.defaultValue is GameData.TripleInt))
-                            desc = (Desc)null;
+                            desc = null;
                         foreach (KeyValuePair<string, GameData.TripleInt> keyValuePair in obj1.referenceData(referenceList, true))
                         {
                             State state2 = obj1.GetState(referenceList, keyValuePair.Key);
@@ -104,7 +103,7 @@ namespace Core
                             foreach (KeyValuePair<string, object> keyValuePair2 in (GameData.Item)keyValuePair1.Value)
                             {
                                 if (keyValuePair1.Value.GetState(keyValuePair2.Key) == State.MODIFIED)
-                                    changeData.Add((Changes)new ChangeData(ChangeType.INSTVALUE, keyValuePair1.Key, keyValuePair2.Key, keyValuePair1.Value.OriginalValue(keyValuePair2.Key), keyValuePair1.Value[keyValuePair2.Key], state2));
+                                    changeData.Add(new ChangeData(ChangeType.INSTVALUE, keyValuePair1.Key, keyValuePair2.Key, keyValuePair1.Value.OriginalValue(keyValuePair2.Key), keyValuePair1.Value[keyValuePair2.Key], state2));
                             }
                         }
                         obj1.ChangeData = changeData;
@@ -133,7 +132,7 @@ namespace Core
 
         public void AddToList(string key, ItemType type, string name, GameChange change)
         {
-            Func<List<GameChange>> ObjectC = () => new List<GameChange>() { change };
+            List<GameChange> ObjectC() => new List<GameChange>() { change };
 
             var hash = new Random($"{type}{name}{key}".GetHashCode()).Next().ToString();
 
@@ -165,10 +164,7 @@ namespace Core
 
             DetailIndex.AddOrUpdate(hash,
               addValue: new DetailChanges() { Name = name, PropertyKey = key, Type = type.ToString() },
-              updateValueFactory: (val, value) =>
-              {
-                  return DetailIndex.GetOrAdd(hash, value);
-              });
+              updateValueFactory: (val, value) => DetailIndex.GetOrAdd(hash, value));
         }
     }
 }

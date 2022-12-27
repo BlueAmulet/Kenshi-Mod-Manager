@@ -1,5 +1,4 @@
 ﻿using Core.Kenshi_Data.Enums;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -175,7 +174,7 @@ namespace Core
                 if (keyValuePair.Value == i)
                     return keyValuePair.Key;
             }
-            return (string)null;
+            return null;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Core
             }
             catch (Exception ex)
             {
-                Logging.Write(Constants.Errorfile, $"Count't verify latest version.");
+                Logging.Write(Constants.Errorfile, "Count't verify latest version.");
                 Logging.Write(Constants.Errorfile, ex);
 
                 return "";
@@ -83,7 +83,6 @@ namespace Core
 
                         if (!rule.ModsOrdered.Any(q => q.UniqueIdentifier == mod.UniqueIdentifier))
                             rule.ModsOrdered.Add(mod);
-                        continue;
                     }
                 }
             }
@@ -141,7 +140,7 @@ namespace Core
 
                 for (int ii = 0; ii < ordered.Count; ii++)
                 {
-                    ordered.ElementAt(ii).Order = ii;
+                    ordered[ii].Order = ii;
                 }
             }
             return ordered.OrderBy(o => ordered);
