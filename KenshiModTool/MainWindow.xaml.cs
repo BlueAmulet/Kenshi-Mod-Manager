@@ -218,10 +218,26 @@ namespace KenshiModTool
                 var dialog = new CommonOpenFileDialog();
                 dialog.IsFolderPicker = true;
                 dialog.InitialDirectory = (string)Registry.GetValue(
-                    Constants.SteamRegistryKey,
-                    "InstallPath",
-                    Constants.DefaultSteamDirectory
-                ) + "\\steamapps\\common\\Kenshi";
+                    Constants.SteamGameKey,
+                    "InstallLocation",
+                    null
+                );
+                if (!Directory.Exists(dialog.InitialDirectory))
+                {
+                    dialog.InitialDirectory = (string)Registry.GetValue(
+                        Constants.SteamRegistryKey,
+                        "InstallPath",
+                        Constants.DefaultSteamDirectory
+                    ) + "\\steamapps\\common\\Kenshi";
+                }
+                if (!Directory.Exists(dialog.InitialDirectory))
+                {
+                    dialog.InitialDirectory = (string)Registry.GetValue(
+                        Constants.GOGGameKey,
+                        "path",
+                        null
+                    );
+                }
                 dialog.Title = Directory.Exists(dialog.InitialDirectory) ? "Is this Kenshi Folder?" : "What is the game folder?";
                 CommonFileDialogResult result = dialog.ShowDialog();
 

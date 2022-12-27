@@ -15,8 +15,10 @@ namespace Core
         public const string BackupSubscribeList = "bkpsubscribedList";
         public const string ConfigFile = "config.json";
         public const string MasterlistFile = "masterlist.json";
+        public const string SteamGameKey = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 233860";
         public const string SteamRegistryKey = "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Valve\\Steam";
         public const string DefaultSteamDirectory = "C:\\Program Files (x86)\\Steam";
+        public const string GOGGameKey = "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\GOG.com\\Games\\1193046833";
 
 #if RELEASE
 #error Should Not compile if there's no updatelist configured. (DO NOT CHANGE THIS)
