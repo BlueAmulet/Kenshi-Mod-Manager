@@ -81,7 +81,7 @@ namespace KenshiModTool
 
                 LoadModList();
 
-                if (ModList.Count > 0)
+                if (ModList.Any(c => c.Source == SourceEnum.Steam))
                 {
                     var files = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{Constants.BackupSubscribeList}*").OrderBy(c => c);
                     if (files.Count() > LoadService.config.MaxLogFiles)
