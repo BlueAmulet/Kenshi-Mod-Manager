@@ -478,7 +478,7 @@ namespace KenshiModTool
                             var isOwned = item.State == "OWNED";
                             var priority = i == ConflictIndex[key].ChangeList.Count - 1 && !isRemoved ? " <<<< This Value will be used" : "";
                             var value = isRemoved ? "" : $"- Value: {item.Value}";
-                            paragraph.Inlines.Add($"{item.State} {value} - Mod: {item.ModName} {priority} {Environment.NewLine}");
+                            paragraph.Inlines.Add($"{item.State} {value} - Mod: {item.ModName}{priority}{Environment.NewLine}");
                         }
                     }
                     Write("*****************************************************************************", "");

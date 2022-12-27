@@ -150,15 +150,15 @@ namespace Core
             }
 
             conflictIndex.AddOrUpdate(hash,
-              addValue: new ModListChanges { Mod = new ConcurrentStack<string>(new List<string> { change.ModName }), ChangeList = new ConcurrentStack<GameChange>(new ConcurrentStack<GameChange>(ObjectC())) },
+              addValue: new ModListChanges { Mod = new ConcurrentBag<string>(new List<string> { change.ModName }), ChangeList = new ConcurrentQueue<GameChange>(new ConcurrentStack<GameChange>(ObjectC())) },
               updateValueFactory: (val, value) =>
               {
                   var current = conflictIndex.GetOrAdd(hash, value);
 
                   if (!current.Mod.Any(q => q == change.ModName))
-                      current.Mod.Push(change.ModName);
+                      current.Mod.Add(change.ModName);
 
-                  current.ChangeList.Push(change);
+                  current.ChangeList.Enqueue(change);
                   return current;
               });
 

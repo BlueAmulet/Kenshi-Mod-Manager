@@ -4,7 +4,7 @@ namespace Core.Models
 {
     public class ModListChanges
     {
-        public ConcurrentStack<string> Mod { get; set; }
-        public ConcurrentStack<GameChange> ChangeList { get; set; }
+        public ConcurrentBag<string> Mod { get; set; }
+        public ConcurrentQueue<GameChange> ChangeList { get; set; }
     }
 }
