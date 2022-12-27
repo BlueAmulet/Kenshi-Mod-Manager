@@ -847,7 +847,7 @@ namespace KenshiModTool
                         (sender as BackgroundWorker).ReportProgress(current.Percent(length));
                     }
 
-                    MessageBox.Show("hey, i completed the changes, i'm generating a report, it'll take a while if your mods has alot of changes.");
+                    Task.Run(() => MessageBox.Show("Mods loaded, generating conflict report. It'll take a while if your mods have a lot of changes."));
 
                     cm.LoadChanges();
 
