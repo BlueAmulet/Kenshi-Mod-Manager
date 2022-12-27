@@ -48,7 +48,7 @@ namespace Core
 
         public static void SaveConfig()
         {
-            File.WriteAllText("config.json", JsonConvert.SerializeObject(config));
+            File.WriteAllText(Constants.ConfigFile, JsonConvert.SerializeObject(config, Formatting.Indented));
         }
 
         public static IEnumerable<Mod> GetListOfMods()
