@@ -26,8 +26,9 @@ namespace Core
             BinaryReader file = new BinaryReader(fileStream);
             try
             {
-                if (file.ReadInt32() > 15)
-                    header = MountMetadata(file);
+                int fileVersion = file.ReadInt32();
+                if (fileVersion > 15)
+                    header = MountMetadata(file, fileVersion);
             }
             catch (EndOfStreamException)
             {
@@ -37,9 +38,15 @@ namespace Core
             return header;
         }
 
-        public static Metadata MountMetadata(BinaryReader file)
+        public static Metadata MountMetadata(BinaryReader file, int fileVersion)
         {
             Metadata header = new Metadata();
+            long headerEnd = 0;
+            if (fileVersion > 16)
+            {
+                headerEnd = file.ReadUInt32();
+                headerEnd += file.BaseStream.Position;
+            }
             header.Version = file.ReadInt32();
             header.Author = Read(file);
             header.Description = Read(file);
@@ -49,6 +56,8 @@ namespace Core
                 header.Dependencies.Clear();
             if (header.Referenced.Count == 1 && header.Referenced[0] == "")
                 header.Referenced.Clear();
+            if (fileVersion > 16)
+                file.BaseStream.Seek(headerEnd, SeekOrigin.Begin);
             return header;
         }
 

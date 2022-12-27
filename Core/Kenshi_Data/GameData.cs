@@ -149,9 +149,15 @@ namespace Core
             return Encoding.UTF8.GetString(StrByteBuffer, 0, count);
         }
 
-        public static Header readHeader(BinaryReader file)
+        public static Header readHeader(BinaryReader file, int fileVersion)
         {
             Header header = new Header();
+            long headerEnd = 0;
+            if (fileVersion > 16)
+            {
+                headerEnd = file.ReadUInt32();
+                headerEnd += file.BaseStream.Position;
+            }
             header.Version = file.ReadInt32();
             header.Author = readString(file);
             header.Description = readString(file);
@@ -161,6 +167,8 @@ namespace Core
                 header.Dependencies.Clear();
             if (header.Referenced.Count == 1 && header.Referenced[0] == "")
                 header.Referenced.Clear();
+            if (fileVersion > 16)
+                file.BaseStream.Seek(headerEnd, SeekOrigin.Begin);
             return header;
         }
 
@@ -196,7 +204,7 @@ namespace Core
                         int fileVersion = file.ReadInt32();
                         if (fileVersion > 15)
                         {
-                            Header header = readHeader(file);
+                            Header header = readHeader(file, fileVersion);
                             if (mode == ModMode.ACTIVE)
                                 this.header = header;
                         }
