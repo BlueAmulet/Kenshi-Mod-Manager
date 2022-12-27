@@ -21,14 +21,19 @@ namespace KenshiModTool
             }
             else
             {
-                if (!File.Exists(Path.Combine(LoadService.config.GamePath, "kenshi_x64.exe")))
+                string ExePath = Path.Combine(LoadService.config.GamePath, "kenshi_x64.exe");
+                if (!File.Exists(ExePath))
                 {
-                    MessageBox.Show("i can't open the game, may you check the path ?");
+                    ExePath = Path.Combine(LoadService.config.GamePath, "kenshi_GOG_x64.exe");
+                }
+                if (!File.Exists(ExePath))
+                {
+                    MessageBox.Show("Can't find the game's exe, check Game Path in Configuration.");
                     return;
                 }
                 psi = new ProcessStartInfo
                 {
-                    FileName = Path.Combine(LoadService.config.GamePath, "kenshi_x64.exe"),
+                    FileName = ExePath,
                     WorkingDirectory = LoadService.config.GamePath
                 };
             }
