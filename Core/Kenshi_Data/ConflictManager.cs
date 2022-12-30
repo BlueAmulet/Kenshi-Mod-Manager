@@ -72,7 +72,7 @@ namespace Core
                                     else
                                         continue;
 
-                                    AddToList(keyValuePair.Key, obj1.type, obj1.Name, changeData);
+                                    AddToList(keyValuePair.Key, obj1.stringID, obj1.type, obj1.Name, changeData);
 
                                     continue;
                             }
@@ -123,18 +123,18 @@ namespace Core
                     Parallel.ForEach(obj.modData, (item) =>
                     {
                         var change = new GameChange { State = obj.GetState().ToString(), ModName = Path.GetFileName(mod.Filename), Value = item.Value };
-                        AddToList(item.Key, obj.type, obj.Name, change);
+                        AddToList(item.Key, obj.stringID, obj.type, obj.Name, change);
                     });
                 }
                 mod.items.Clear();
             }
         }
 
-        public void AddToList(string key, ItemType type, string name, GameChange change)
+        public void AddToList(string key, string id, ItemType type, string name, GameChange change)
         {
             List<GameChange> ObjectC() => new List<GameChange>() { change };
 
-            var hash = new Random($"{type}{name}{key}".GetHashCode()).Next().ToString();
+            var hash = $"{id}\x00{type}\x00{name}\x00{key}";
 
             lock (sync)
             {
