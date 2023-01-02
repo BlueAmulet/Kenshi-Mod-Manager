@@ -5,31 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KenshiModTool"
         mc:Ignorable="d"
-        Title="Configuration" Height="280" Width="298" WindowStartupLocation="CenterScreen" Icon="/icon.png">
+        Title="Configuration" Width="260" Height="300" WindowStartupLocation="CenterScreen" Icon="/icon.png">
     <Grid  HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <!--Game Path-->
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 
             <!--Steam Path-->
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 
             <!--Masterlist-->
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 
             <!--Updates-->
-            <RowDefinition Height="25" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Content="Game Path" HorizontalAlignment="Stretch" />
         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" x:Name="TxtGamePath" TextWrapping="Wrap" UndoLimit="20"  Margin="5,5,5,5" HorizontalAlignment="Stretch" />
@@ -45,13 +45,10 @@
 
         <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <CheckBox Grid.Row="0" Grid.Column="0"  Margin="5,5,5,5"  IsChecked="{Binding check}" Name="chk_updatesAutomatically"></CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="0"  Margin="5,5,5,5"  IsChecked="{Binding check}" VerticalAlignment="Center" Name="chk_updatesAutomatically"></CheckBox>
             <Label Grid.Row="0" Grid.Column="1" Content="Check for Updates automatically?" HorizontalAlignment="Stretch" />
         </Grid>
         <Separator Grid.Row="10" />

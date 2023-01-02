@@ -65,7 +65,7 @@
             <RowDefinition Height="35" />
 
             <RowDefinition Height="3*" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="5" />
             <RowDefinition Height="*" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
@@ -186,8 +186,19 @@
         </DockPanel>
         <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" x:Name="btnReloadMods" Content="Refresh List" Click="BtnRefreshMods_Click" Margin="0,5,0,5" />
         <ProgressBar Name="PBStatus" Grid.Row="3" Grid.ColumnSpan="3" Minimum="0" Maximum="100" Value="0" Height="6px" VerticalAlignment="Top" />
-        <ListView  x:Name="lsView"
-                  Grid.Row="3"
+        <Grid Grid.Row="3" Grid.ColumnSpan="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+            <ListView  x:Name="lsView"
+                  Grid.Row="0"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   VerticalAlignment="Stretch"
@@ -195,62 +206,62 @@
                   SelectionMode="Extended"
                   BorderThickness="1" Margin="0,10,0,5" SelectionChanged="ListView_SelectionChanged"
                   HorizontalContentAlignment="Stretch">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Background" Value="{Binding Color}"></Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="|||" Width="10" x:Name="Handle" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid  HorizontalAlignment="Stretch">
-                                    <CheckBox  IsChecked="{Binding Active}" Checked="UpdateCheckBox" Unchecked="UpdateCheckBox" />
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                        <GridViewColumnHeader Tag="Active" Click="SortHeaderClick" />
-                    </GridViewColumn>
-                    <GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid  HorizontalAlignment="Stretch">
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Order}"  KeyDown="RibbonTextBox_KeyDown" MaxLength="5"  Margin="5,5,5,5" Width="40" />
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                        <GridViewColumnHeader Tag="Order" Click="SortHeaderClick" />
-                    </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Width="200">
-                        <GridViewColumnHeader Tag="DisplayName" Click="SortHeaderClick" Content="Name" />
-                    </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding DisplayCategories}">
-                        <GridViewColumnHeader Tag="DisplayCategories" Click="SortHeaderClick" Content="Categories" />
-                    </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Source}">
-                        <GridViewColumnHeader Tag="Source" Click="SortHeaderClick" Content="Source" />
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-            <ListView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Visit mod page" CommandParameter="{Binding}"  Click="CheckModPage_Click" />
-                    <MenuItem Header="Open Mod Folder" CommandParameter="{Binding}"  Click="OpenModFolder_Click" />
-                    <MenuItem Header="Active Selected Mods" CommandParameter="{Binding}"  Click="ActiveMods" />
-                    <MenuItem Header="Deactive Selected Mods" CommandParameter="{Binding}"  Click="DeactiveMods" />
-                    <MenuItem Header="Toggle Active Selected Mods" CommandParameter="{Binding}"  Click="ToggleActive" />
-                    <MenuItem Name="MenuUnSubs"  Header="Unsubscribe (STEAM must be running and need to be logged.)" CommandParameter="{Binding}"  Click="UnSubscribe" />
-                </ContextMenu>
-            </ListView.ContextMenu>
-            <!--<ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Background" Value="{Binding Color}"></Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="|||" Width="10" x:Name="Handle" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid  HorizontalAlignment="Stretch">
+                                        <CheckBox  IsChecked="{Binding Active}" Checked="UpdateCheckBox" Unchecked="UpdateCheckBox" />
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                            <GridViewColumnHeader Tag="Active" Click="SortHeaderClick" />
+                        </GridViewColumn>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid  HorizontalAlignment="Stretch">
+                                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Order}"  KeyDown="RibbonTextBox_KeyDown" MaxLength="5"  Margin="5,5,5,5" Width="40" />
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                            <GridViewColumnHeader Tag="Order" Click="SortHeaderClick" />
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Width="200">
+                            <GridViewColumnHeader Tag="DisplayName" Click="SortHeaderClick" Content="Name" />
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding DisplayCategories}">
+                            <GridViewColumnHeader Tag="DisplayCategories" Click="SortHeaderClick" Content="Categories" />
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Source}">
+                            <GridViewColumnHeader Tag="Source" Click="SortHeaderClick" Content="Source" />
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Visit mod page" CommandParameter="{Binding}"  Click="CheckModPage_Click" />
+                        <MenuItem Header="Open Mod Folder" CommandParameter="{Binding}"  Click="OpenModFolder_Click" />
+                        <MenuItem Header="Active Selected Mods" CommandParameter="{Binding}"  Click="ActiveMods" />
+                        <MenuItem Header="Deactive Selected Mods" CommandParameter="{Binding}"  Click="DeactiveMods" />
+                        <MenuItem Header="Toggle Active Selected Mods" CommandParameter="{Binding}"  Click="ToggleActive" />
+                        <MenuItem Name="MenuUnSubs"  Header="Unsubscribe (STEAM must be running and need to be logged.)" CommandParameter="{Binding}"  Click="UnSubscribe" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid  Width="Auto" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -271,24 +282,18 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>-->
-            <Models:Mod Author="Test 1" Active="True" Color="&quot;red&quot;" Description="" Id="2" Order="1" FilePath="&quot;c:\sample.mod&quot;" Source="GameFolder" />
-            <Models:Mod Author="With Error" FilePath="&quot;&quot;" Order="-1" Active="True" Color="&quot;gray&quot;" />
-            <Models:Mod Color="&quot;#ff9632&quot;" FilePath="&quot;c:\Search.mod&quot;" />
-        </ListView>
-        <Grid Grid.Row="4" Grid.ColumnSpan="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Margin="0,0,5,5" Grid.Column="0"  x:Name="BtnGameFolder"  Content="Open Game Folder" Click="BtnGameFolder_Click" />
-            <Button Margin="0,0,5,5" Grid.Column="1"  x:Name="GameModFolder"  Content="Open Game Mod Folder" Click="GameModFolder_Click" />
-            <Button Margin="0,0,5,5" Grid.Column="2"  x:Name="BtnSteamFolder" Content="Open Steam Mod Folder" Click="BtnSteamFolder_Click" />
-            <!--<Button Margin="0,0,5,5" Grid.Column="3"  x:Name="btnOrder"       Content="Order Mods (Beta!)" Click="BtnOrder_Click" />-->
-            <!--<Button Margin="0,0,5,5" Grid.Column="4"  x:Name="btnCheckConflicts"       Content="Check Conflicts(WIP!)" Click="CheckConflicts" />-->
-            <Button Margin="0,0,0,5" Grid.Column="3"  x:Name="btnTooling"       Content="Folder Management" Click="OpenTooling" />
+                <Models:Mod Author="Test 1" Active="True" Color="&quot;red&quot;" Description="" Id="2" Order="1" FilePath="&quot;c:\sample.mod&quot;" Source="GameFolder" />
+                <Models:Mod Author="With Error" FilePath="&quot;&quot;" Order="-1" Active="True" Color="&quot;gray&quot;" />
+                <Models:Mod Color="&quot;#ff9632&quot;" FilePath="&quot;c:\Search.mod&quot;" />
+            </ListView>
+            <Button Margin="0,0,5,0" Grid.Row="1" Grid.Column="0"  x:Name="BtnGameFolder"  Content="Open Game Folder" Click="BtnGameFolder_Click" />
+            <Button Margin="0,0,5,0" Grid.Row="1" Grid.Column="1"  x:Name="GameModFolder"  Content="Open Game Mod Folder" Click="GameModFolder_Click" />
+            <Button Margin="0,0,5,0" Grid.Row="1" Grid.Column="2"  x:Name="BtnSteamFolder" Content="Open Steam Mod Folder" Click="BtnSteamFolder_Click" />
+            <!--<Button Margin="0,0,5,0" Grid.Row="1" Grid.Column="3"  x:Name="btnOrder"       Content="Order Mods (Beta!)" Click="BtnOrder_Click" />-->
+            <!--<Button Margin="0,0,5,0" Grid.Row="1" Grid.Column="4"  x:Name="btnCheckConflicts"       Content="Check Conflicts(WIP!)" Click="CheckConflicts" />-->
+            <Button Margin="0,0,0,0" Grid.Row="1" Grid.Column="3"  x:Name="btnTooling"       Content="Folder Management" Click="OpenTooling" />
         </Grid>
+        <GridSplitter Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
         <ScrollViewer Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4">
             <RichTextBox IsDocumentEnabled="True" x:Name="RtbDetail" IsReadOnly="True"  AcceptsReturn="True" AcceptsTab="True">
                 <RichTextBox.Resources>
