@@ -838,6 +838,7 @@ namespace KenshiModTool
                     foreach (var mod in ordered)
                     {
                         Console.WriteLine($"{mod.DisplayName} Loading...");
+                        mod.Conflicts.Clear();
                         var gd = new GameData();
 
                         cm.LoadMods(mod.FilePath, ModMode.ACTIVE, gd);
@@ -849,7 +850,7 @@ namespace KenshiModTool
 
                     Task.Run(() => MessageBox.Show("Mods loaded, generating conflict report. It'll take a while if your mods have a lot of changes."));
 
-                    cm.LoadChanges();
+                    cm.LoadChanges(sender as BackgroundWorker);
 
                     //if (!Directory.Exists("reports"))
                     //    Directory.CreateDirectory("reports");
@@ -884,8 +885,6 @@ namespace KenshiModTool
                             {
                                 mod.Conflicts.Push(key);
                             }
-                            current++;
-                            (sender as BackgroundWorker).ReportProgress(current.Percent(length));
                         }
                     });
 

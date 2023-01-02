@@ -141,7 +141,7 @@ namespace TestProject
                 cm.ListOfGameData.Add(gd);
             }
 
-            cm.LoadChanges();
+            cm.LoadChanges(null);
 
             stopwatch.Stop();
             Console.WriteLine(stopwatch.ElapsedMilliseconds / 1000 + " Seconds Elapsed");

@@ -114,8 +114,15 @@ namespace Core
             nodes.Clear();
         }
 
-        public void LoadChanges()
+        public void LoadChanges(System.ComponentModel.BackgroundWorker backgroundWorker)
         {
+            int current = 0;
+            int length = 0;
+            foreach (var mod in ListOfGameData)
+            {
+                length += mod.items.Count;
+            }
+
             foreach (var mod in ListOfGameData)
             {
                 foreach (var obj in mod.items.Values)
@@ -125,6 +132,8 @@ namespace Core
                         var change = new GameChange { State = obj.GetState().ToString(), ModName = Path.GetFileName(mod.Filename), Value = item.Value };
                         AddToList(item.Key, obj.stringID, obj.type, obj.Name, change);
                     });
+                    current++;
+                    backgroundWorker?.ReportProgress(current.Percent(length));
                 }
                 mod.items.Clear();
             }
